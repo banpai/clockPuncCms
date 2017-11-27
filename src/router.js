@@ -142,22 +142,10 @@ export const appRouter = [
         path: '/tables',
         icon: 'ios-grid-view',
         name: 'tables',
-        title: '数据展示',
+        title: '用户信息',
         component: Main,
         children: [
-            { path: 'exportableTable', title: '用户信息', name: 'exportable-table', icon: 'code-download', component: resolve => { require(['./views/tables/exportable-table.vue'], resolve); } },
-            { path: 'table2image', title: '表格转图片', name: 'table-to-image', icon: 'images', component: resolve => { require(['./views/tables/table-to-image.vue'], resolve); } }
-        ]
-    },
-    {
-        path: '/advanced-router',
-        icon: 'ios-infinite',
-        name: 'advanced-router',
-        title: '高级路由',
-        component: Main,
-        children: [
-            { path: 'mutative-router', title: '动态路由', name: 'mutative-router', icon: 'link', component: resolve => { require(['./views/advanced-router/mutative-router.vue'], resolve); } },
-            { path: 'argument-page', title: '带参页面', name: 'argument-page', icon: 'android-send', component: resolve => { require(['./views/advanced-router/argument-page.vue'], resolve); } }
+            { path: 'exportableTable', title: '用户信息', name: 'exportable-table', icon: 'code-download', component: resolve => { require(['./views/tables/exportable-table.vue'], resolve); } }
         ]
     }
 ];
