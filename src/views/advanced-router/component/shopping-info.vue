@@ -30,7 +30,7 @@ export default {
                     align: 'center'
                 },
                 {
-                    title: '购买时间',
+                    title: '购买时间aaa',
                     key: 'time',
                     align: 'center'
                 },

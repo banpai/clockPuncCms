@@ -59,7 +59,27 @@ export const otherRouter = {
         { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: resolve => { require(['./views/own-space/own-space.vue'], resolve); } },
         { path: 'order/:order_id', title: '订单详情', name: 'order_info', component: resolve => { require(['./views/advanced-router/component/order-info.vue'], resolve); } },  // 用于展示动态路由
         { path: 'shopping', title: '购物详情', name: 'shopping', component: resolve => { require(['./views/advanced-router/component/shopping-info.vue'], resolve); } },  // 用于展示带参路由
-        { path: 'message', title: '消息中心', name: 'message_index', component: resolve => { require(['./views/message/message.vue'], resolve); } }
+        { path: 'message', title: '消息中心', name: 'message_index', component: resolve => { require(['./views/message/message.vue'], resolve); } },
+        { 
+            path: 'punch', 
+            title: '打卡记录',
+            name: 'punch', 
+            component: resolve => { 
+                require([
+                    './views/tables/components/punchTable.vue'
+                ], resolve); 
+            } 
+        },
+        { 
+            path: 'friends', 
+            title: '好友列表',
+            name: 'friends', 
+            component: resolve => { 
+                require([
+                    './views/tables/components/friendsTable.vue'
+                ], resolve); 
+            } 
+        }
     ]
 };
 
@@ -118,18 +138,6 @@ export const appRouter = [
             }
         ]
     },
-    // {
-    //     path: '/charts',
-    //     icon: 'ios-analytics',
-    //     name: 'charts',
-    //     title: '图表',
-    //     component: Main,
-    //     children: [
-    //         { path: 'pie', title: '饼状图', name: 'pie', icon: 'ios-pie', component: resolve => { require('./views/access/access.vue') },
-    //         { path: 'histogram', title: '柱状图', name: 'histogram', icon: 'stats-bars', component: resolve => { require('./views/access/access.vue') }
-
-    //     ]
-    // },
     {
         path: '/tables',
         icon: 'ios-grid-view',
@@ -137,9 +145,6 @@ export const appRouter = [
         title: '数据展示',
         component: Main,
         children: [
-            { path: 'dragableTable', title: '可拖拽排序', name: 'dragable-table', icon: 'arrow-move', component: resolve => { require(['./views/tables/dragable-table.vue'], resolve); } },
-            { path: 'editableTable', title: '可编辑表格', name: 'editable-table', icon: 'edit', component: resolve => { require(['./views/tables/editable-table.vue'], resolve); } },
-            { path: 'searchableTable', title: '可搜索表格', name: 'searchable-table', icon: 'search', component: resolve => { require(['./views/tables/searchable-table.vue'], resolve); } },
             { path: 'exportableTable', title: '用户信息', name: 'exportable-table', icon: 'code-download', component: resolve => { require(['./views/tables/exportable-table.vue'], resolve); } },
             { path: 'table2image', title: '表格转图片', name: 'table-to-image', icon: 'images', component: resolve => { require(['./views/tables/table-to-image.vue'], resolve); } }
         ]

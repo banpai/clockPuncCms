@@ -1,14 +1,4 @@
-export const table2excelData = [
-  {
-      nickname: 'John Brown',
-      sex: 18,
-      country: 18,
-      province: 18,
-      city: 18,
-      action: 'xiefei'
-  }
-];
-
+import util from '@/libs/util';
 export const excelColumns = [
   {
     title: '名称',
@@ -72,6 +62,7 @@ export const excelColumns = [
                     click: () => {
                       // alert(JSON.stringify(params))
                         this.show(params.index)
+
                     }
                 }
             }, '打卡记录'),
