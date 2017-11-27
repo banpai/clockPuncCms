@@ -46,7 +46,7 @@
         <div style="height: 30px;"></div>
         <!--分页的页数 start-->
         <template>
-                          <Page :total="total" @on-change="page"></Page>
+                            <Page :total="total" @on-change="page"></Page>
 </template>
 <!--分页的页数 end-->
 </Card>
@@ -121,6 +121,8 @@
             console.log(response.data);
             this.total = response.data.total;
             this.data = response.data.data;
+          }).catch(error => {
+            this.$Message.warning('初始化数据失败');
           });
       },
       /**
