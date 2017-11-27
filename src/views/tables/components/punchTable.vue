@@ -1,6 +1,6 @@
 <style lang="less" scoped>
-  @import '../../../styles/common.less';
-  @import './../components/table.less';
+  @import "../../../styles/common.less";
+  @import "./../components/table.less";
 </style>
 
 <template>
@@ -17,10 +17,13 @@
           </Col>
           <Col span='6' class="padding-left-10">
           <!--查询数据 start-->
-          <div class="margin-top-10 margin-left-10">
+          <div class="margin-top-10 margin-left-10" style="display: none;">
             <Input placeholder="搜姓名或国籍或省份或城市…" style="width: 190px" v-model="searchName" />
           </div>
           <!--查询时间 start-->
+          <div class="margin-top-10 margin-left-10">
+            <TimePicker @on-change="timeChange" @on-clear="clearTime" format="HH:mm:ss" type="timerange" placement="bottom-end" placeholder="选择时间范围搜搜…" style="width: 190px"></TimePicker>
+          </div>
           <div class="margin-top-10 margin-left-10">
             <DatePicker type="daterange" placement="bottom-end" placeholder="选择日期范围搜搜…" style="width: 190px" @on-change="dateChange" @on-clear="clearDate"></DatePicker>
           </div>
@@ -43,7 +46,7 @@
         <div style="height: 30px;"></div>
         <!--分页的页数 start-->
         <template>
-              <Page :total="total" @on-change="page"></Page>
+                          <Page :total="total" @on-change="page"></Page>
 </template>
 <!--分页的页数 end-->
 </Card>
@@ -52,55 +55,37 @@
 </template>
 
 <script>
-  import util from '@/libs/util.js';
-  import table2excel from '@/libs/table2excel.js';
+  import util from "@/libs/util.js";
+  import table2excel from "@/libs/table2excel.js";
   export default {
-    name: 'exportable-table',
+    name: "exportable-table",
     data() {
       return {
         data: [],
+        time: [],
         excelColumns: [{
-            title: '昵称',
-            key: 'nickname',
+            title: "昵称",
+            key: "nickname",
             render: (h, params) => {
-              return h('div', [
-                h('Icon', {
+              var nickname = this.nickname;
+              return h("div", [
+                h("Icon", {
                   props: {
-                    type: 'person'
+                    type: "person"
                   }
                 }),
-                h('strong', params.row.nickname)
+                h("strong", nickname)
               ]);
             }
           },
           {
-            title: '性别',
-            key: 'sex',
-            render: (h, params) => {
-              var sexName = '男';
-              if (params.row.sex == 0) {
-                sexName = '女';
-              }
-              return h('div', [
-                h('strong', sexName)
-              ]);
-            }
+            title: "打卡时间",
+            key: "punchTime"
           },
           {
-            title: '国籍',
-            key: 'country'
-          },
-          {
-            title: '省份',
-            key: 'province'
-          },
-          {
-            title: '城市',
-            key: 'city'
-          },
-          {
-            title: '加入时间',
-            key: 'createTime'
+            title: "打卡日期",
+            key: "punchDate",
+            width: 150
           }
         ],
         selectMinCol: 1,
@@ -108,75 +93,106 @@
         minRow: 1,
         maxCol: 0,
         minCol: 1,
-        excelFileName: '',
+        excelFileName: "",
         tableExcel: {},
         fontSize: 16,
         total: 0,
         data: [],
-        startDate: '',
-        endDate: '',
-        searchName: ''
+        startDate: "",
+        endDate: "",
+        searchName: "",
+        nickname: ""
       };
     },
     methods: {
       exportExcel() {
-        table2excel.transform(this.$refs.tableExcel, 'hrefToExportTable', this.excelFileName);
+        table2excel.transform(
+          this.$refs.tableExcel,
+          "hrefToExportTable",
+          this.excelFileName
+        );
       },
       // 初始化数据
       init(data) {
-        alert(this.$route.query.openid);
         // 初始化数据
-        util.ajax.post('/api/clockPunch/cms/ShowData/getMembers', data).then(response => {
-          console.log(response.data);
-          this.total = response.data.total;
-          this.data = response.data.data;
-        }).catch(error => {
-          this.$Message.warning('初始化数据失败');
-        });
+        util.ajax
+          .post("/api/clockPunch/cms/ShowData/getPunchDate", data)
+          .then(response => {
+            console.log(response.data);
+            this.total = response.data.total;
+            this.data = response.data.data;
+          });
       },
-      page(p) {
-        // alert(p);
+      /**
+       * 加载数据的封装 
+       */
+      doDate(p) {
+        var current_page = 1;
+        if (p) {
+          current_page = p;
+        }
         var vm = this;
+        if (this.$route.query.nickname) {
+          this.nickname = this.$route.query.nickname;
+        }
+        // alert(this.$route.query.nickname);
+        var openid = "";
+        if (this.$route.query.punchOpenid) {
+          openid = this.$route.query.punchOpenid;
+        }
         var params = {
-          current_page: p,
+          current_page: current_page,
+          openid: openid,
           startDate: vm.startDate,
           endDate: vm.endDate,
+          startTime: vm.time[0],
+          endTime: vm.time[1],
           searchName: vm.searchName
         };
-        this.init(params);
+        return Promise.resolve(params)
+      },
+      page(p) {
+        this.doDate(p).then(params => {
+          this.init(params);
+        })
       },
       // 时间改变
       dateChange(e) {
         this.startDate = e[0];
         this.endDate = e[1];
       },
+      // 修改时间啊
+      timeChange(e) {
+        this.time = e;
+      },
       // 清除时间
       clearDate() {
-        this.startDate = '';
-        this.endDate = '';
+        this.startDate = "";
+        this.endDate = "";
+      },
+      clearTime() {
+        this.time = [];
       },
       // 搜索数据
       search() {
-        // alert(p);
-        var vm = this;
-        var params = {
-          current_page: 1,
-          startDate: vm.startDate,
-          endDate: vm.endDate,
-          searchName: vm.searchName
-        };
-        this.init(params);
+        this.doDate().then(params => {
+          this.init(params);
+        })
       }
     },
     mounted() {
-      var vm = this;
-      var params = {
-        current_page: 1,
-        startDate: vm.startDate,
-        endDate: vm.endDate,
-        searchName: vm.searchName
-      };
-      this.init(params);
+      this.doDate().then(params => {
+        this.init(params);
+      })
+    },
+    watch: {
+      '$route' () {
+        if (this.$route.query.punchOpenid && this.$route.query.nickname) {
+          this.doDate().then(params => {
+            this.init(params);
+          })
+        }
+      }
     }
   };
 </script>

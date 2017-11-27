@@ -99,8 +99,14 @@
                         key: 'city'
                     },
                     {
-                        title: '加入时间',
-                        key: 'createTime'
+                        title: '加入日期',
+                        key: 'createTime',
+                        render: (h, params) => {
+                            var createTime = params.row.createTime.substring(0, 10);
+                            return h('div', [
+                                h('strong', createTime)
+                            ]);
+                        }
                     },
                     {
                         title: '操作',
@@ -120,7 +126,8 @@
                                     on: {
                                         click: () => {
                                             let query = {
-                                                openid: params.row.openid
+                                                punchOpenid: params.row.openid,
+                                                nickname: params.row.nickname 
                                             };
                                             util.openNewPage(this, 'punch', undefined, query);
                                             this.$router.push({
@@ -138,7 +145,8 @@
                                     on: {
                                         click: () => {
                                             let query = {
-                                                openid: params.row.openid
+                                                friendsOpenid: params.row.openid,
+                                                nickname: params.row.nickname
                                             };
                                             util.openNewPage(this, 'friends', undefined, query);
                                             this.$router.push({
