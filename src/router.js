@@ -86,6 +86,16 @@ export const otherRouter = {
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
     {
+        path: '/tables',
+        icon: 'ios-grid-view',
+        name: 'tables',
+        title: '用户信息',
+        component: Main,
+        children: [
+            { path: 'exportableTable', title: '用户信息', name: 'exportable-table', icon: 'code-download', component: resolve => { require(['./views/tables/exportable-table.vue'], resolve); } }
+        ]
+    },
+    {
         path: '/component',
         icon: 'social-buffer',
         name: 'component',
@@ -128,24 +138,7 @@ export const appRouter = [
                 name: 'join-set',
                 title: '参加活动页面配置',
                 component: resolve => { require(['./views/my_components/join-set/join-set.vue'], resolve); }
-            },
-            {
-                path: 'change-icon',
-                icon: 'compose',
-                name: 'change-icon',
-                title: '更换客服头像',
-                component: resolve => { require(['./views/my_components/change-icon/change-icon.vue'], resolve); }
             }
-        ]
-    },
-    {
-        path: '/tables',
-        icon: 'ios-grid-view',
-        name: 'tables',
-        title: '用户信息',
-        component: Main,
-        children: [
-            { path: 'exportableTable', title: '用户信息', name: 'exportable-table', icon: 'code-download', component: resolve => { require(['./views/tables/exportable-table.vue'], resolve); } }
         ]
     }
 ];

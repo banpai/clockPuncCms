@@ -36,13 +36,13 @@
                             <Icon type="locked" :size="20"></Icon>
                         </Tooltip>
                     </div>
-                    <div @click="showMessage" class="message-con">
+                    <!-- <div @click="showMessage" class="message-con">
                         <Tooltip :content="messageCount > 0 ? '有' + messageCount + '条未读消息' : '无未读消息'" placement="bottom">
                             <Badge :count="messageCount" dot>
                                 <Icon type="ios-bell" :size="22"></Icon>
                             </Badge>
                         </Tooltip>
-                    </div>
+                    </div> -->
                     <div class="switch-theme-con">
                         <Row class="switch-theme" type="flex" justify="center" align="middle">
                             <theme-dropdown-menu></theme-dropdown-menu>
