@@ -9,7 +9,7 @@
       <Card>
         <h4 slot="title">
           <Icon type="android-archive"></Icon>
-          用户信息表
+          <span v-text="nickname"></span>的好友列表
         </h4>
         <Row>
           <Col span="18">
@@ -43,7 +43,7 @@
         <div style="height: 30px;"></div>
         <!--分页的页数 start-->
         <template>
-                <Page :total="total" @on-change="page"></Page>
+                      <Page :total="total" @on-change="page"></Page>
 </template>
 <!--分页的页数 end-->
 </Card>
@@ -99,8 +99,14 @@
             key: 'city'
           },
           {
-            title: '加入时间',
-            key: 'createTime'
+            title: '加入日期',
+            key: 'createTime',
+            render: (h, params) => {
+              var createTime = params.row.createTime.substring(0, 10);
+              return h('div', [
+                h('strong', createTime)
+              ]);
+            }
           },
           {
             title: '操作',
@@ -120,7 +126,8 @@
                   on: {
                     click: () => {
                       let query = {
-                        openid: params.row.openid
+                        punchOpenid: params.row.openid,
+                        nickname: params.row.nickname
                       };
                       util.openNewPage(this, 'punch', undefined, query);
                       this.$router.push({
@@ -138,7 +145,8 @@
                   on: {
                     click: () => {
                       let query = {
-                        openid: params.row.openid
+                        friendsOpenid: params.row.openid,
+                        nickname: params.row.nickname
                       };
                       util.openNewPage(this, 'friends', undefined, query);
                       this.$router.push({
@@ -164,7 +172,8 @@
         data: [],
         startDate: '',
         endDate: '',
-        searchName: ''
+        searchName: '',
+        nickname: ''
       };
     },
     methods: {
@@ -173,9 +182,11 @@
       },
       // 初始化数据
       init(data) {
-        alert(this.$route.query.openid);
+        this.nickname = this.$route.query.nickname;
+        data.openid = this.$route.query.friendsOpenid;
+        // alert(this.$route.query.friendsOpenid);
         // 初始化数据
-        util.ajax.post('/api/clockPunch/cms/ShowData/getMembers', data).then(response => {
+        util.ajax.post('/api/clockPunch/cms/ShowData/getFriendsDate', data).then(response => {
           console.log(response.data);
           this.total = response.data.total;
           this.data = response.data.data;
@@ -226,6 +237,21 @@
         searchName: vm.searchName
       };
       this.init(params);
+    },
+    watch: {
+      '$route' () {
+        if (this.$route.query.friendsOpenid && this.$route.query.nickname) {
+          // alert(p);
+          var vm = this;
+          var params = {
+            current_page: 1,
+            startDate: vm.startDate,
+            endDate: vm.endDate,
+            searchName: vm.searchName
+          };
+          this.init(params);
+        }
+      }
     }
   };
 </script>
