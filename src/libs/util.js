@@ -12,7 +12,7 @@ util.title = function (title) {
 const ajaxUrl = env === 'development'
     ? 'http://summer.natapp1.cc'
     : env === 'production'
-    ? 'https://www.url.com'
+    ? 'http://summer.natapp1.cc'
     : 'https://debug.url.com';
 util.ajaxUrl = ajaxUrl;
 util.ajax = axios.create({
